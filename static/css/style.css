@@ -240,6 +240,31 @@ h1, .brand {
     margin-bottom: 1rem;
 }
 
+.skills {
+    padding: 1rem 0;
+}
+
+.skills h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.skills-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+}
+
+.skills-item {
+    padding: 1.5rem;
+    border: 2px solid var(--ink);
+    border-radius: var(--radius);
+    background-color: var(--paper);
+    text-align: center;
+}
+
+
 @media (max-width: 600px) {
     .hero-grid {
         grid-template-columns: 1fr;
