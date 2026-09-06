@@ -96,7 +96,7 @@ h1, .brand {
 }
 
 .bio {
-    color: var(--text-muted);
+    color: var(--ink);
     max-width: 480px;
     margin-bottom: 1.5rem;
 }
@@ -174,6 +174,39 @@ h1, .brand {
     color: var(--text-muted);
     font-size: 0.85rem;
     border-top: 1px solid var(--line);
+}
+
+.education {
+    padding: 1rem 0;
+}
+
+.education h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.education-list {
+    border: 2px solid var(--ink);
+    border-radius: var(--radius);
+    background-color: var(--paper);
+    padding: 1.5rem 2rem;
+}
+
+.education-item {
+    display: flex;
+    gap: 2rem;
+    padding: 1.5rem 0;
+}
+
+.education-item + .education-item {
+    border-top: 1px solid var(--ink);
+}
+
+.education-year {
+    min-width: 130px;
+    font-weight: 600;
+    color: var(--accent-dark);
 }
 
 .experience {
