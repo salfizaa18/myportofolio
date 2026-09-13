@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Education - {{ name }}</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+</head>
+
+<body>
+    <header class="site-header">
+        <div class="container">
+            <a href="{% url 'main:show_main' %}" class="brand">{{ name }}</a>
+
+            <nav>
+                <a href="{% url 'main:show_main' %}">Profile</a>
+                <a href="{% url 'main:show_experience' %}">Experience</a>
+                <a href="{% url 'main:show_education' %}">Education</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="education" id="education">
+            <div class="container">
+                <p class="section-kicker">Pendidikan saya sejauh ini</p>
+                <h1>Education</h1>
+                <div class="education-list">
+                    {% for education in education_list %}
+                        <article class="education-item">
+                            <span class="education-year">
+                                {{ education.started_at }} -
+                                {% if education.ended_at %}
+                                    {{ education.ended_at }}
+                                {% else %}
+                                    Present
+                                {% endif %}
+                            </span>
+                            <h2>{{ education.title }}</h2>
+                            <p class="education-info">
+                                {{ education.description }}
+                            </p>
+
+                            <p class="education-category">
+                                {{ education.get_category_display }}
+                            </p>
+                        </article>
+
+                    {% empty %}
+                        <p class="empty-state">
+                            Belum ada data education.
+                        </p>
+
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; 2026 {{ name }}. Fakultas Ilmu Komputer, Universitas Indonesia.</p>
+        </div>
+    </footer>
+</body>
+</html>
