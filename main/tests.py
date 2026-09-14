@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
 
-from main.models import Experience
+from main.models import Experience, Education
 
 
 class MainTest(TestCase):
@@ -11,6 +11,7 @@ class MainTest(TestCase):
             title="Asisten Dosen PBP",
             description="Membantu mahasiswa memahami pengembangan web.",
             category="part-time",
+            started_at=2026,
         )
 
     def test_main_url_is_accessible(self):
@@ -49,10 +50,47 @@ class MainTest(TestCase):
         self.assertContains(response, "Belum ada pengalaman yang ditambahkan.")
 
     def test_completed_experience(self):
-        self.experience.ended_at = timezone.now()
+        self.experience.ended_at = 2027
         self.experience.save()
         response = self.client.get(reverse("main:show_experience"))
 
         self.assertFalse(self.experience.is_ongoing)
         self.assertContains(response, "Selesai")
         self.assertNotContains(response, "Sedang berlangsung")
+
+class EducationTest(TestCase):
+    def setUp(self):
+        self.education = Education.objects.create(
+            title="Universitas Indonesia",
+            description="S1 Information Systems - Computer Science",
+            category="Kuliah",
+            started_at=2025,
+        )
+
+    def test_education_url_is_accessible(self):
+        response = self.client.get(reverse("main:show_education"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "education.html")
+
+    def test_education_page_shows_data(self):
+        response = self.client.get(reverse("main:show_education"))
+
+        self.assertContains(response, self.education.title)
+        self.assertContains(response, self.education.description)
+        self.assertContains(response, "Kuliah")
+        self.assertContains(response, "Present")
+
+    def test_empty_education_page(self):
+        Education.objects.all().delete()
+        response = self.client.get(reverse("main:show_education"))
+        
+        self.assertContains(response, "Belum ada data education.")
+
+    def test_completed_education_shows_end_year(self):
+        self.education.ended_at = 2029
+        self.education.save()
+        response = self.client.get(reverse("main:show_education"))
+
+        self.assertContains(response, "2029")
+        self.assertNotContains(response, "Present")
