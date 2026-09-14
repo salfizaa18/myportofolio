@@ -6,6 +6,7 @@ Kelas: PBP A
 
 Umur: 19 Tahun
 
+TUGAS 1
 Pertanyaan Reflektif:
 1. Pada Tutorial dan Tugas 1, Anda diberi kebebasan untuk menentukan tampilan dari website portofolio Anda. Saat Anda merancang struktur HTML yang digunakan, apakah Anda menggunakan elemen semantik HTML5 seperti <section>, <article>, atau <aside>? Jika iya, bagaimana elemen tersebut membantu Anda dalam membuat static web? Jika tidak, mengapa tanpa elemen tersebut sudah memenuhi kebutuhan desain Anda?
 = Iya, saya menggunakan <section> untuk membagi website myportofolio menjadi beberapa bagian yaitu profile, education, experience, dan skills. Elemen <section> membantu saya membuat struktur HTML yang saya buat menjadi lebih terorganisir dan mudah dipahami, sehingga setiap bagian website myportofolio memiliki fungsi dan struktur yang jelas.

@@ -11,7 +11,6 @@ class MainTest(TestCase):
             title="Asisten Dosen PBP",
             description="Membantu mahasiswa memahami pengembangan web.",
             category="part-time",
-            started_at=2026,
         )
 
     def test_main_url_is_accessible(self):
@@ -50,7 +49,7 @@ class MainTest(TestCase):
         self.assertContains(response, "Belum ada pengalaman yang ditambahkan.")
 
     def test_completed_experience(self):
-        self.experience.ended_at = 2027
+        self.experience.ended_at = timezone.now()
         self.experience.save()
         response = self.client.get(reverse("main:show_experience"))
 
