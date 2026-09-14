@@ -6,18 +6,17 @@ Kelas: PBP A
 
 Umur: 19 Tahun
 
-TUGAS 1
-Pertanyaan Reflektif:
-1. Pada Tutorial dan Tugas 1, Anda diberi kebebasan untuk menentukan tampilan dari website portofolio Anda. Saat Anda merancang struktur HTML yang digunakan, apakah Anda menggunakan elemen semantik HTML5 seperti <section>, <article>, atau <aside>? Jika iya, bagaimana elemen tersebut membantu Anda dalam membuat static web? Jika tidak, mengapa tanpa elemen tersebut sudah memenuhi kebutuhan desain Anda?
+# TUGAS 1
+### 1. Pada Tutorial dan Tugas 1, Anda diberi kebebasan untuk menentukan tampilan dari website portofolio Anda. Saat Anda merancang struktur HTML yang digunakan, apakah Anda menggunakan elemen semantik HTML5 seperti <section>, <article>, atau <aside>? Jika iya, bagaimana elemen tersebut membantu Anda dalam membuat static web? Jika tidak, mengapa tanpa elemen tersebut sudah memenuhi kebutuhan desain Anda?
 = Iya, saya menggunakan <section> untuk membagi website myportofolio menjadi beberapa bagian yaitu profile, education, experience, dan skills. Elemen <section> membantu saya membuat struktur HTML yang saya buat menjadi lebih terorganisir dan mudah dipahami, sehingga setiap bagian website myportofolio memiliki fungsi dan struktur yang jelas.
 
-2. Ketika Anda mengatur CSS Anda agar tetap responsive, tantangan tata letak apa yang Anda temukan? Bagaimana Anda mengevaluasi elemen mana yang harus diubah posisinya atau diprioritaskan ukurannya saat berpindah dari tampilan desktop ke mobile?
+### 2. Ketika Anda mengatur CSS Anda agar tetap responsive, tantangan tata letak apa yang Anda temukan? Bagaimana Anda mengevaluasi elemen mana yang harus diubah posisinya atau diprioritaskan ukurannya saat berpindah dari tampilan desktop ke mobile?
 = Tantangan yang saya temukan adalah menyesuaikan tampilan layout website agar tetap nyaman dilihat pada layar mobile yang lebih kecil. Pada tampilan desktop, Experience menggunakan dua kolom, tetapi saya mengubahnya menjadi satu kolom pada layar dengan lebar maksimal 600px menggunakan media query. Dengan begitu, setiap informasi Experience tetap mudah dibaca meskipun dilihat lewat mobile.
 
-3. Website yang Anda buat saat ini adalah static web murni. Batasan apa yang Anda rasakan saat mencoba menyajikan informasi pada portofolio Anda secara optimal? Berdasarkan batasan tersebut, fungsionalitas dinamis apa yang paling ingin Anda persiapkan dan tambahkan pada iterasi proyek selanjutnya?
+### 3. Website yang Anda buat saat ini adalah static web murni. Batasan apa yang Anda rasakan saat mencoba menyajikan informasi pada portofolio Anda secara optimal? Berdasarkan batasan tersebut, fungsionalitas dinamis apa yang paling ingin Anda persiapkan dan tambahkan pada iterasi proyek selanjutnya?
 = Batasan yang saya rasakan adalah informasi masih harus diperbarui secara manual melalui kode HTML. Pada proyek selanjutnya, saya ingin menambahkan suatu informasi baru melalui database dan halaman admin agar dapat dikelola dan diperbarui secara dinamis tanpa mengubah kode HTML nya secara langsung.
 
-AI Disclosure
+### AI Disclosure
 Pada tugas 1 ini saya menggunakan Chatgpt untuk membantu saya dalam memahami konsep yang belum saya ketahui dan bingungkan. 
 Hal yang dibantu:
 1. Penempatan section yang mau ditambahkan
@@ -27,3 +26,21 @@ Namun, dalam pengerjaannya, saya tetap berusaha memahami dan mengerjakan secara 
 
 Referensi lain yang saya gunakan untuk membuat animasi text:
 https://youtube.com/shorts/UYZW5Upwrt0?si=TrPduqvLpzsE3Ax5
+
+# TUGAS 2
+### 1. Jelaskan alur yang terjadi ketika pengguna membuka halaman portofolio baru, mulai dari permintaan yang diterima proyek hingga data ditampilkan pada browser. Dalam jawabanmu, jelaskan peran urls.py proyek, urls.py aplikasi, view, model, dan template.
+= Alur yang terjadi dimulai saat pengguna membuka halaman portofolio, request dari browser diterima oleh urls.py proyek dan diarahkan ke urls.py aplikasi. Selanjutnya, URL tersebut memanggil view yang mengambil data melalui model dari database. Data yang diperoleh kemudian dikirim ke template untuk ditampilkan dalam bentuk HTML, lalu hasilnya dikirim kembali ke browser sehingga halaman portofolio dapat dilihat pengguna.
+
+### 2. Mengapa data untuk bagian portofolio baru sebaiknya disimpan pada model dan tidak ditulis langsung di dalam template? Jelaskan dampaknya terhadap kemudahan pemeliharaan dan pengembangan aplikasi.
+= Hal ini dilakukan agar data terpisah dari template. Dengan begitu, data lebih mudah ditambah, diubah, serta dikelola melalui database tanpa harus mengubah kode HTML. Hal ini membuat apllikasi lebih mudah untuk dipelihara dan dikembangkan, terutama jika jumlah data semakin banyak atau ingin menambahkan fitur baru.
+
+### 3. Apa perbedaan fungsi makemigrations dan migrate pada Django? Berikan contoh perubahan model yang mengharuskanmu menjalankan kedua perintah tersebut.
+= Makemigrations digunakan untuk membuat file migration berdasarkan perubahan pada model, sedangkan migrate digunakan untuk menerapkan perubahan tersebut ke database.
+Contohnya jika pada model experience ditambahkan field baru seperti foto = models.ImageField(upload_to="experience_photos/", blank=True, null=True). Maka jalankan python manage.py makemigrations dan python manage.py migrate untuk membuat catatan perubahan struktur database serta menerapkan perubahan tersebut ke database.
+
+### AI Disclosure
+Pada tugas 2 ini saya menggunakan Chatgpt untuk membantu saya dalam memahami konsep yang belum saya ketahui dan bingungkan. 
+Hal yang dibantu:
+1. Pembuatan hover effect
+2. Pembuatan animasi gradient pada background
+Dalam proses pengerjaannya, saya tetap berusaha memahami konsep yang diberikan terlebih dahulu sebelum mengimplementasikannya secara mandiri. Dengan demikian, AI saya gunakan sebagai alat bantu untuk memahami konsep dan membantu menjawab kebingungan yang saya temui selama pengerjaan.
