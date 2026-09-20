@@ -1,6 +1,6 @@
-from django.forms import ModelForm, TextInput, Textarea, URLInput
+from django.forms import ModelForm, TextInput, Textarea, URLInput, NumberInput, Select
 
-from main.models import Project
+from main.models import Project, Education
 
 class ProjectForm(ModelForm):
     class Meta:
@@ -47,6 +47,49 @@ class ProjectForm(ModelForm):
             "project_image_url": URLInput(
                 attrs={
                     "placeholder": "https://drive.google.com/thumbnail?id=...&sz=w1000",
+                }
+            ),
+        }
+
+class EducationForm(ModelForm):
+    class Meta:
+        model = Education
+        fields = [
+            "title",
+            "description",
+            "category",
+            "started_at",
+            "ended_at"
+        ]
+
+        labels = {
+            "title": "Nama Institusi",
+            "description": "Deskripsi",
+            "category": "Jenjang",
+            "started_at": "Tahun Mulai",
+            "ended_at": "Tahun Selesai",
+        }
+
+        widgets = {
+            "title": TextInput(
+                attrs={
+                    "placeholder": "SMA Negeri 1 Jakarta", "maxlength": 255
+                }
+            ),
+            "description": Textarea(
+                attrs={
+                    "placeholder": "Jurusan, prestasi, kegiatan, dll.", "rows": 3
+                }
+            ),
+            "category": Select(),
+            "started_at": NumberInput(
+                attrs={
+                    "placeholder": "2021"
+                }
+            ),
+            "ended_at": NumberInput(
+                attrs={
+                    "placeholder": "2024 (kosongkan jika masih berjalan)"
                 }
             ),
         }
