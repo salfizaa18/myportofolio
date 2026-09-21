@@ -10,12 +10,20 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AlterField(
+        migrations.RemoveField(
+            model_name='experience',
+            name='ended_at',
+        ),
+        migrations.AddField(
             model_name='experience',
             name='ended_at',
             field=models.DateTimeField(blank=True, null=True),
         ),
-        migrations.AlterField(
+        migrations.RemoveField(
+            model_name='experience',
+            name='started_at',
+        ),
+        migrations.AddField(
             model_name='experience',
             name='started_at',
             field=models.DateTimeField(auto_now_add=True),

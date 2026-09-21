@@ -10,24 +10,42 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AlterField(
+        migrations.RemoveField(
+            model_name='education',
+            name='ended_at',
+        ),
+        migrations.AddField(
             model_name='education',
             name='ended_at',
             field=models.IntegerField(blank=True, null=True),
         ),
-        migrations.AlterField(
+        migrations.RemoveField(
             model_name='education',
             name='started_at',
-            field=models.IntegerField(),
         ),
-        migrations.AlterField(
+        migrations.AddField(
+            model_name='education',
+            name='started_at',
+            field=models.IntegerField(default=2020),
+            preserve_default=False,
+        ),
+        migrations.RemoveField(
+            model_name='experience',
+            name='ended_at',
+        ),
+        migrations.AddField(
             model_name='experience',
             name='ended_at',
             field=models.IntegerField(blank=True, null=True),
         ),
-        migrations.AlterField(
+        migrations.RemoveField(
             model_name='experience',
             name='started_at',
-            field=models.IntegerField(),
+        ),
+        migrations.AddField(
+            model_name='experience',
+            name='started_at',
+            field=models.IntegerField(default=2020),
+            preserve_default=False,
         ),
     ]
