@@ -6,7 +6,12 @@
     <main>
         <section class="education" id="education">
             <div class="container">
-                <h1>Education</h1>
+                <div class="project-header">
+                    <h1>Education</h1>
+                    <a href="{% url 'main:create_education' %}" class="button project-add-button">
+                        <span aria-hidden="true">+</span> Tambah Pendidikan
+                    </a>
+                </div>
                 <div class="education-list">
                     {% for education in education_list %}
                         <article class="education-item">
@@ -22,17 +27,18 @@
                             <p class="education-info">
                                 {{ education.description }}
                             </p>
-
                             <p class="education-category">
                                 {{ education.get_category_display }}
                             </p>
+                            <div class="project-card-actions">
+                                <div class="project-actions">
+                                    <a href="{% url 'main:update_education' education.id %}" class="button button-secondary">Edit</a>
+                                    {% include "components/education_delete_modal.html" with education=education %}
+                                </div>
+                            </div>
                         </article>
-
                     {% empty %}
-                        <p class="empty-state">
-                            Belum ada data education.
-                        </p>
-
+                        <p class="empty-state">Belum ada data education.</p>
                     {% endfor %}
                 </div>
             </div>
