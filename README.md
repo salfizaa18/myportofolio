@@ -44,3 +44,24 @@ Hal yang dibantu:
 1. Pembuatan hover effect
 2. Pembuatan animasi gradient pada background
 Dalam proses pengerjaannya, saya tetap berusaha memahami konsep yang diberikan terlebih dahulu sebelum mengimplementasikannya secara mandiri. Dengan demikian, AI saya gunakan sebagai alat bantu untuk memahami konsep dan membantu menjawab kebingungan yang saya temui selama pengerjaan.
+
+# TUGAS 3
+### 1. Jelaskan mengapa kita menggunakan ModelForm pada Django alih-alih membuat form HTML secara manual. Selain itu, jelaskan pula mengapa kita diwajibkan menambahkan {% csrf_token %} pada form tersebut!
+= ModelForm digunakan karena dapat membuat form berdasarkan model Django secara otomatis. Jadi, kita tidak perlu menulis field html satu per satu secara manual. Modelform juga melakukan validasi otomatis mengikuti aturan pada model. Selain itu, ketika model berubah (nambah/ hapus field), form dapat ikut menyesuaikan tanpa harus merombak ulang html.
+{% csrf_token %} wajib ditambahkan karena Django memiliki perlindungan bawaan yang bernama CSRF (Cross-Site Request Forgery). Tanpa adanya perlindungan ini, website lain dapat membuat form tersembunyi yang otomatis submit POST ke website kita. Selain itu {% csrf_token %} menyisipkan token acak dan unik per session sebagai hidden input yang akan dicocokkan dengan yang tersimpan di sisi server. Kalau tidak ada/ tidak cocok, request akan ditolak.
+
+### 2. Pada Tutorial 03, kita membahas format data JSON dan XML. Mengapa JSON lebih disukai dalam pengembangan aplikasi web modern dibandingkan XML?
+= JSON lebih banyak digunakan karena memiliki format yang lebih sederhana, singkat, dan mudah dibaca, baik oleh manusia maupun program. Struktur JSON juga sesuai dengan tipe data yang umum digunakan pemrograman, seperti object, array, string, dan number.
+Selain itu, JSON biasanya menghasilkan ukuran data yang lebih kecil dibandingkan XML sehingga lebih efisien. JSON juga didukung dengan sangat baik oleh JavaScript dan berbagai platform web modern.
+
+### 3. Jelaskan alur yang terjadi saat kamu menggunakan fungsi view untuk mengembalikan data portofoliomu dalam bentuk JSON. Mengapa kita perlu melakukan proses serialization pada model Django sebelum datanya dikembalikan?
+= Ketika client mengakses URL, request akan diteruskan ke fungsi view yang sesuai. View kemudian mengambil data portofolio dari model Django. Data tersebut selanjutnya dilakukan proses serialization agar object Django dapat diubah menjadi representasi data yang terstruktur dan dapat dikonversi ke format JSON. Setelah itu, data dikembalikan kepada client dalam bentuk JSON response. Serialization diperlukan karena object Django merupakan objek python yang tidak dapat langsung dikirim sebagai JSON. Dengan serialization, data dari model dapat diubah menjadi format yang dapat direpresentasikan dalam JSON sehingga dapat dikirim dan diproses oleh client.
+
+### AI Disclosure
+Pada tugas 3 ini saya menggunakan ChatGpt untuk membantu saya dalam memahami konsep yang belum saya ketahui dan bingungkan. 
+Hal yang dibantu:
+1. Penjelasan mengenai perbedaan antara method http GET dan POST
+2. Penjelasan mengenai perbedaan antara objek dan QuerySet Django
+3. Penjelasan mengenai alasan penggunaan {% csrf_token %} pada setiap form
+4. Penjelasan proses serialization pada model Django
+Dalam proses pengerjaannya, saya tetap berusaha memahami konsep yang diberikan terlebih dahulu sebelum mengimplementasikannya secara mandiri. Dengan demikian, AI saya gunakan sebagai alat bantu untuk memahami konsep dan membantu menjawab kebingungan yang saya temui selama pengerjaan.
