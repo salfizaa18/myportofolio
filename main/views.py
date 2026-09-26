@@ -74,7 +74,6 @@ def get_projects_json(request):
         projects = projects.filter(title__icontains=title_query)
 
     projects_json = serializers.serialize(
-        "json", projects,
         "json", projects, use_natural_foreign_keys=True,
     )
     return HttpResponse(projects_json, content_type="application/json")
