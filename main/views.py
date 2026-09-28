@@ -98,9 +98,14 @@ def get_education_json(request):
 
 def show_education(request):
     json_response = get_education_json(request)
+    is_editor = request.user.groups.filter(name="Editor").exists()
     education_entries = serializers.deserialize("json", json_response.content.decode("utf-8"))
     education_list = [entry.object for entry in education_entries]
-    context = {"name": "Salwa", "education_list": education_list}
+    context = {
+        "name": "Salwa",
+        "education_list": education_list,
+        "is_editor": is_editor
+    }
     return render(request, "education.html", context)
 
 @login_required(login_url="/login/")
