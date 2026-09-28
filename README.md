@@ -22,6 +22,7 @@ Hal yang dibantu:
 1. Penempatan section yang mau ditambahkan
 2. Penggunakan CSS untuk mengatur tampilan website, seperti cara mengatur jarak antar elemen, posisi dan layout
 3. Penggunaan border, padding, dan border-radius untuk membuat dan mengatur tampilan kotak pada section
+
 Namun, dalam pengerjaannya, saya tetap berusaha memahami dan mengerjakan secara mandiri. Misalnya dalam penambahan section baru, saya membuatnya sendiri dengan melihat pola dari template pada tutorial 1 di bagian index html. Untuk pengeditan tampilan website menggunakan CSS serta pembuatan kotak di bagian section, saya berusaha untuk memahami terlebih dahulu sebelum mengimplementasikannya secara mandiri. Dengan demikian, AI saya gunakan sebagai alat bantu dalam memahami konsep dan menjawab kebingungan.
 
 Referensi lain yang saya gunakan untuk membuat animasi text:
@@ -43,6 +44,7 @@ Pada tugas 2 ini saya menggunakan Chatgpt untuk membantu saya dalam memahami kon
 Hal yang dibantu:
 1. Pembuatan hover effect
 2. Pembuatan animasi gradient pada background
+
 Dalam proses pengerjaannya, saya tetap berusaha memahami konsep yang diberikan terlebih dahulu sebelum mengimplementasikannya secara mandiri. Dengan demikian, AI saya gunakan sebagai alat bantu untuk memahami konsep dan membantu menjawab kebingungan yang saya temui selama pengerjaan.
 
 # TUGAS 3
@@ -64,4 +66,15 @@ Hal yang dibantu:
 2. Penjelasan mengenai perbedaan antara objek dan QuerySet Django
 3. Penjelasan mengenai alasan penggunaan {% csrf_token %} pada setiap form
 4. Penjelasan proses serialization pada model Django
+
+Dalam proses pengerjaannya, saya tetap berusaha memahami konsep yang diberikan terlebih dahulu sebelum mengimplementasikannya secara mandiri. Dengan demikian, AI saya gunakan sebagai alat bantu untuk memahami konsep dan membantu menjawab kebingungan yang saya temui selama pengerjaan.
+
+# TUGAS 4
+### AI Disclosure
+Pada tugas 4 ini saya menggunakan ChatGpt untuk membantu saya dalam memahami konsep yang belum saya ketahui dan bingungkan.
+Hal yang dibantu:
+1. Penjelasan mengapa link education tidak muncul di navbar
+2. Penempatan use_natural_foreign_keys=True yang tepat di JSON
+3. Penjelasan group di django
+
 Dalam proses pengerjaannya, saya tetap berusaha memahami konsep yang diberikan terlebih dahulu sebelum mengimplementasikannya secara mandiri. Dengan demikian, AI saya gunakan sebagai alat bantu untuk memahami konsep dan membantu menjawab kebingungan yang saya temui selama pengerjaan.
