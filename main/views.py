@@ -81,7 +81,7 @@ def get_projects_json(request):
 @login_required(login_url="/login/")
 def delete_project(request, project_id):
     if not request.user.is_superuser:
-            raise PermissionDenied
+        raise PermissionDenied
     project = get_object_or_404(Project, pk=project_id)
 
     if request.method == "POST":
@@ -103,7 +103,10 @@ def show_education(request):
     context = {"name": "Salwa", "education_list": education_list}
     return render(request, "education.html", context)
 
+@login_required(login_url="/login/")
 def create_education(request):
+    if not request.user.is_superuser:
+        raise PermissionDenied
     form = EducationForm(request.POST or None)
     if request.method == "POST" and form.is_valid():
         form.save()
@@ -112,8 +115,11 @@ def create_education(request):
     context = {"name": "Salwa", "form": form, "form_title": "Tambah Pendidikan"}
     return render(request, "education_form.html", context)
 
+@login_required(login_url="/login/")
 def update_education(request, education_id):
     education = get_object_or_404(Education, pk=education_id)
+    if not request.user.is_superuser and not request.user.groups.filter(name="Editor").exists():
+        raise PermissionDenied
     form = EducationForm(request.POST or None, instance=education)
     if request.method == "POST" and form.is_valid():
         form.save()
@@ -122,8 +128,11 @@ def update_education(request, education_id):
     context = {"name": "Salwa", "form": form, "form_title": "Edit Pendidikan"}
     return render(request, "education_form.html", context)
 
+@login_required(login_url="/login/")
 def delete_education(request, education_id):
     education = get_object_or_404(Education, pk=education_id)
+    if not request.user.is_superuser:
+        raise PermissionDenied
     if request.method == "POST":
         education.delete()
         messages.success(request, "Riwayat pendidikan berhasil dihapus!")
