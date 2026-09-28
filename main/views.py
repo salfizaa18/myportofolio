@@ -93,7 +93,7 @@ def delete_project(request, project_id):
 
 def get_education_json(request):
     education = Education.objects.all()
-    education_json = serializers.serialize("json", education)
+    education_json = serializers.serialize("json", education, use_natural_foreign_keys=True)
     return HttpResponse(education_json, content_type="application/json")
 
 def show_education(request):
