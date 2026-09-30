@@ -2,6 +2,7 @@ from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
 from main.views import show_main, show_experience, show_education, create_project, show_projects, get_projects_json, delete_project, create_education, update_education, delete_education, get_education_json, login_user, register, logout_user, toggle_star, toggle_star_education
+from main import views
 
 
 app_name = "main"
@@ -20,6 +21,7 @@ urlpatterns = [
     path("api/projects/", get_projects_json, name="get_projects_json"),
     path("projects/<uuid:project_id>/delete/", delete_project, name="delete_project"),
     path("projects/<uuid:project_id>/star/", toggle_star, name="toggle_star"),
+    path('projects/create-ajax/', views.create_project_ajax, name='create_project_ajax'),
     path("register/", register, name="register"),
     path("login/", login_user, name="login"),
     path("logout/", logout_user, name="logout"),
