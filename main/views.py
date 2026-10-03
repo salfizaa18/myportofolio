@@ -105,19 +105,42 @@ def delete_project(request, project_id):
     return redirect("main:show_projects")
 
 def get_education_json(request):
-    education = Education.objects.all()
-    education_json = serializers.serialize("json", education, use_natural_foreign_keys=True)
-    return HttpResponse(education_json, content_type="application/json")
+    query = request.GET.get("title", "").strip()
+    education_qs = Education.objects.prefetch_related('starred_by').all()
+
+    if query:
+        education_qs = education_qs.filter(title__icontains=query)
+
+    data = []
+    for edu in education_qs:
+        starred_users = edu.starred_by.all()
+        is_starred = request.user in starred_users if request.user.is_authenticated else False
+
+        data.append({
+            "pk": str(edu.id),
+            "fields": {
+                "title": edu.title,
+                "description": edu.description,
+                "category": edu.get_category_display(),
+                "started_at": edu.started_at,
+                "ended_at": edu.ended_at,
+                "star_count": starred_users.count(),
+                "is_starred": is_starred,
+                "starred_by_names": ", ".join(u.username for u in starred_users),
+            }
+        })
+
+    return JsonResponse(data, safe=False)
 
 def show_education(request):
-    json_response = get_education_json(request)
+    title_query = request.GET.get("title", "").strip()
     is_editor = request.user.groups.filter(name="Editor").exists()
-    education_entries = serializers.deserialize("json", json_response.content.decode("utf-8"))
-    education_list = [entry.object for entry in education_entries]
+
     context = {
         "name": "Salwa",
-        "education_list": education_list,
-        "is_editor": is_editor
+        "title_query": title_query,
+        "form": EducationForm(),
+        "is_editor": is_editor,
     }
     return render(request, "education.html", context)
 
