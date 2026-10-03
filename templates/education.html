@@ -14,42 +14,27 @@
                         </a>
                     {% endif %}
                 </div>
-                <div class="education-list">
-                    {% for education in education_list %}
-                        <article class="education-item">
-                            <span class="education-year">
-                                {{ education.started_at }} -
-                                {% if education.ended_at %}
-                                    {{ education.ended_at }}
-                                {% else %}
-                                    Present
-                                {% endif %}
-                            </span>
-                            <h2>{{ education.title }}</h2>
-                            <p class="education-info">
-                                {{ education.description }}
-                            </p>
-                            <p class="education-category">
-                                {{ education.get_category_display }}
-                            </p>
-                            <div class="project-card-actions">
-                                <div class="project-actions">
-                                    {% if user.is_authenticated %}
-                                        {% include "components/education_star.html" with education=education %}
-                                    {% endif %}
-                                    {% if user.is_superuser or is_editor %}
-                                        <a href="{% url 'main:update_education' education.id %}" class="button button-secondary">Edit</a>
-                                    {% endif %}
-                                    {% if user.is_superuser %}
-                                        {% include "components/education_delete_modal.html" with education=education %}
-                                    {% endif %}
-                                </div>
-                            </div>
-                        </article>
-                    {% empty %}
-                        <p class="empty-state">Belum ada data education.</p>
-                    {% endfor %}
+                <form id="education-search-form" class="project-search">
+                    <input type="search"
+                        id="education-search-input"
+                        name="title"
+                        value="{{ title_query }}"
+                        placeholder="Cari berdasarkan nama institusi"
+                        class="project-search__input"
+                        aria-label="Cari berdasarkan nama institusi">
+                    <button type="submit" class="button">Cari</button>
+                </form>
+
+                <div id="education-loading" class="empty-state hide">
+                    <p>Memuat riwayat pendidikan...</p>
                 </div>
+                <div id="education-error" class="empty-state hide">
+                    <p>Gagal memuat data pendidikan. Silakan coba lagi.</p>
+                </div>
+                <div id="education-empty" class="empty-state hide">
+                    <p>Belum ada data pendidikan atau tidak ditemukan.</p>
+                </div>
+                <div id="education-list" class="education-list hide"></div>
             </div>
         </section>
     </main>
