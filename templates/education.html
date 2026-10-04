@@ -9,9 +9,10 @@
                 <div class="project-header">
                     <h1>Education</h1>
                     {% if user.is_superuser %}
-                        <a href="{% url 'main:create_education' %}" class="button project-add-button">
-                            <span aria-hidden="true">+</span> Tambah Pendidikan
-                        </a>
+                        <button type="button" class="button project-add-button" popovertarget="add-education-modal">
+                            <span aria-hidden="true">+</span>
+                            Tambah Pendidikan
+                        </button>
                     {% endif %}
                 </div>
                 <form id="education-search-form" class="project-search">
@@ -38,6 +39,9 @@
             </div>
         </section>
     </main>
+    {% if user.is_superuser %}
+        {% include "components/education_form_modal.html" %}
+    {% endif %}
     <script>
     const EDUCATION_ENDPOINT = "{% url 'main:get_education_json' %}";
     const IS_SUPERUSER = "{{ user.is_superuser|yesno:'true,false' }}" === "true";
@@ -118,6 +122,10 @@
         return articleElement;
     }
 
+    function closeEducationModal() {
+        document.getElementById("add-education-modal").hidePopover();
+    }
+    
     async function fetchEducation(searchQuery = "") {
         if (educationAbortController) educationAbortController.abort();
         educationAbortController = new AbortController();
