@@ -1,7 +1,7 @@
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
-from main.views import show_main, show_experience, show_education, create_project, show_projects, get_projects_json, delete_project, create_education, update_education, delete_education, get_education_json, login_user, register, logout_user, toggle_star, toggle_star_education
+from main.views import show_main, show_experience, show_education, create_project, show_projects, get_projects_json, delete_project, create_education, update_education, delete_education, get_education_json, login_user, register, logout_user, toggle_star, toggle_star_education, create_education_ajax
 from main import views
 
 
@@ -16,6 +16,7 @@ urlpatterns = [
     path("education/<uuid:education_id>/delete/", delete_education, name="delete_education"),
     path("api/education/", get_education_json, name="get_education_json"),
     path("education/<uuid:education_id>/star/", toggle_star_education, name="toggle_star_education"),
+    path("education/add-ajax/", create_education_ajax, name="create_education_ajax"),
     path("projects/add/", create_project, name="create_project"),
     path("projects/", show_projects, name="show_projects"),
     path("api/projects/", get_projects_json, name="get_projects_json"),
@@ -25,6 +26,6 @@ urlpatterns = [
     path("register/", register, name="register"),
     path("login/", login_user, name="login"),
     path("logout/", logout_user, name="logout"),
-]
+]               
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

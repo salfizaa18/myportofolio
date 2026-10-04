@@ -156,6 +156,24 @@ def create_education(request):
     context = {"name": "Salwa", "form": form, "form_title": "Tambah Pendidikan"}
     return render(request, "education_form.html", context)
 
+@require_POST
+def create_education_ajax(request):
+    if not request.user.is_superuser:
+        return JsonResponse(
+            {"message": "Hanya pemilik portofolio yang dapat menambahkan data pendidikan."},
+            status=403,
+        )
+
+    form = EducationForm(request.POST)
+    if form.is_valid():
+        education = form.save()
+        return JsonResponse(
+            {"message": "Data pendidikan berhasil ditambahkan.", "pk": str(education.id)},
+            status=201,
+        )
+
+    return JsonResponse({"errors": form.errors.get_json_data()}, status=400)
+
 @login_required(login_url="/login/")
 def update_education(request, education_id):
     education = get_object_or_404(Education, pk=education_id)
