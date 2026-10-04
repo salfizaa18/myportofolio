@@ -91,16 +91,16 @@
             ? `Dibintangi oleh ${edu.starred_by_names}`
             : "Jadilah yang pertama memberi star";
 
-        const starHtml = IS_AUTHENTICATED
-            ? `<form method="post" action="${starUrl}" class="star-form">
+         const starHtml = `
+            <form method="post" action="${starUrl}" class="star-form">
                 {% csrf_token %}
                 <button type="submit" class="button button-star${isStarredClass}" title="${starTitle}">
                     <span aria-hidden="true">★</span>
                     ${starText}
                     <span class="star-count">${edu.star_count}</span>
                 </button>
-            </form>`
-            : '';
+            </form>
+        `;
 
         articleElement.innerHTML = `
             <span class="education-year">${edu.started_at} - ${edu.ended_at || 'Present'}</span>
@@ -149,9 +149,24 @@
         }
     }
 
-    eduSearchForm.addEventListener('submit', function(e) {
-        e.preventDefault();
+    const EDUCATION_SEARCH_DEBOUNCE_DELAY = 300;
+    let educationSearchDebounceTimer;
+
+    function searchEducation() {
         fetchEducation(eduSearchInput.value.trim());
+    }
+
+    eduSearchInput.addEventListener("input", function() {
+        clearTimeout(educationSearchDebounceTimer);
+        educationSearchDebounceTimer = setTimeout(function() {
+            searchEducation();
+        }, EDUCATION_SEARCH_DEBOUNCE_DELAY);
+    });
+
+    eduSearchForm.addEventListener("submit", function(event) {
+        event.preventDefault();
+        clearTimeout(educationSearchDebounceTimer);
+        searchEducation();
     });
 
     fetchEducation(eduSearchInput.value.trim());
