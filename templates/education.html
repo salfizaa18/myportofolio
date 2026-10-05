@@ -63,6 +63,15 @@
         eduListContainer.classList.toggle('hide', !showList);
     }
 
+    function escapeHtml(value) {
+        return String(value ?? '')
+            .replaceAll('&', '&amp;')
+            .replaceAll('<', '&lt;')
+            .replaceAll('>', '&gt;')
+            .replaceAll('"', '&quot;')
+            .replaceAll("'", '&#39;');
+    }
+
     function buildEducationCardElement(item) {
         const edu = item.fields;
         const eduId = item.pk;
@@ -107,10 +116,10 @@
         `;
 
         articleElement.innerHTML = `
-            <span class="education-year">${edu.started_at} - ${edu.ended_at || 'Present'}</span>
-            <h2>${edu.title}</h2>
-            <p class="education-info">${edu.description}</p>
-            <p class="education-category">${edu.category}</p>
+            <span class="education-year">${escapeHtml(edu.started_at)} - ${edu.ended_at ? escapeHtml(edu.ended_at) : 'Present'}</span>
+            <h2>${escapeHtml(edu.title)}</h2>
+            <p class="education-info">${escapeHtml(edu.description)}</p>
+            <p class="education-category">${escapeHtml(edu.category)}</p>
             <div class="project-card-actions">
                 <div class="project-actions">
                     ${starHtml}
