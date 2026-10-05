@@ -78,3 +78,23 @@ Hal yang dibantu:
 3. Penjelasan group di django
 
 Dalam proses pengerjaannya, saya tetap berusaha memahami konsep yang diberikan terlebih dahulu sebelum mengimplementasikannya secara mandiri. Dengan demikian, AI saya gunakan sebagai alat bantu untuk memahami konsep dan membantu menjawab kebingungan yang saya temui selama pengerjaan.
+
+# TUGAS 5
+### 1. Jelaskan apa itu debouncing dan mengapa teknik ini penting diterapkan pada fitur pencarian yang menggunakan AJAX!
+= Debouncing merupakan suatu teknik untuk menunda eksekusi suatu fungsi sampai pengguna berhenti melakukan input selama waktu tertentu. Pada fitur pencarian yang menggunakan AJAX, debouncicng penting karena tanpa teknik ini setiap perubahan input dapat langsung mengirim request ke server. Misalnya ketika pengguna mengetik "program", dapat terjadi beberapa request untuk “p”, “pr”, “pro”, “prog”, dan seterusnya. Dengan debouncing, request hanya dikirim setelah pengguna berhenti mengetik selama beberapa saat, sehingga jumlah request berkurang, beban server dan database lebih ringan, serta fitur pencarian menjadi lebih efisien.
+
+### 2. Jelaskan fungsi dari penggunaan await ketika kita menggunakan fetch()! Apa yang akan terjadi jika kita tidak menggunakan await?
+= await digunakan untuk menunggu proses asynchronous dari fetch() selesai sebelum kode dilanjutkan ke baris berikutnya. Misalnya const response = await fetch(url) akan menunggu sampai server memberikan response, sehingga hasilnya dapat langsung digunakan untuk mengambil data dengan response.json(). Jika tidak menggunakan await, hasil dari fetch() masih berupa Promise, bukan response yang sudah selesai diterima. Akibatnya kita tidak bisa langsung menggunakan hasil tersebut seperti response biasa dan perlu menggunakan cara lain seperti .then() untuk menangani hasil request setelah selesai.
+
+### 3. Jelaskan apa itu serangan XSS (Cross-Site Scripting) dan mengapa data yang ditampilkan melalui AJAX/JavaScript lebih rentan terhadap serangan ini daripada data yang ditampilkan langsung melalui template Django!
+= XSS (Cross-Site Scripting) adalah serangan ketika penyerang memasukkan kode JavaScript berbahaya ke dalam halaman web sehingga kode tersebut dapat dijalankan oleh browser pengguna. Data yang ditampilkan melalui AJAX/JavaScript dapat lebih rentan karena developer harus secara manual menentukan bagaimana data tersebut dimasukkan ke halaman. Misalnya, penggunaan innerHTML untuk memasukkan data yang berasal dari user dapat menyebabkan data dianggap sebagai HTML dan berpotensi menjalankan kode berbahaya. Sementara itu, data yang ditampilkan melalui template Django seperti {{ data }} secara default akan melalui proses escaping, sehingga karakter HTML berbahaya tidak langsung dianggap sebagai kode. Namun, AJAX sendiri bukan penyebab XSS; kerentanannya bergantung pada bagaimana data yang diterima diproses dan ditampilkan oleh JavaScript.
+
+### AI Disclosure
+Pada tugas 5 ini saya menggunakan Claude untuk membantu saya dalam memahami konsep yang belum saya ketahui dan bingungkan. Hal yang dibantu:
+1. Pemberikan massage commit yang detail dan sesuai yang ditambahkan
+2. Penjelasan cara menggunakan async dan await dengan fetch()
+3. Penjelasan cara menggunakan setTimeout dan clearTimeout untuk membuat debounce di kolom pencarian
+4. Penjelasan cara mengirim token CSRF lewat header yang berbeda dengan {% csrf_token %}
+5. Penjelasan cara kerja escapeHtml di JavaScript dan strip_tags di forms.py
+
+Dalam pengerjaannya saya tetap berusaha memahami dan mengerjakan secara mandiri. Misalnya dalam implementasi AJAX untuk menampilkan data Education (loading state, search, dan modal tambah data), saya membuatnya sendiri dengan melihat pola dari template pada tutorial 5 di bagian get_projects_json, fetchProjects, dan modal form Project, lalu menyesuaikannya ke bagian Education yang saya kerjakan. Untuk pengiriman token CSRF lewat header saat menggunakan fetch() dan penerapan proteksi XSS (escapeHtml serta strip_tags), saya berusaha untuk memahami terlebih dahulu sebelum mengimplementasikannya secara mandiri. Dengan demikian, AI saya gunakan sebagai alat bantu dalam memahami konsep dan menjawab kebingungan.
