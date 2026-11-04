@@ -72,24 +72,33 @@ class EducationTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "education.html")
 
-    def test_education_page_shows_data(self):
+    def test_education_page_loads_from_drf_api(self):
         response = self.client.get(reverse("main:show_education"))
 
-        self.assertContains(response, self.education.title)
-        self.assertContains(response, self.education.description)
-        self.assertContains(response, "Kuliah")
-        self.assertContains(response, "Present")
+        self.assertContains(response, reverse("api:education-list"))
+        self.assertContains(response, 'id="education-list"')
 
-    def test_empty_education_page(self):
+    def test_education_api_shows_data(self):
+        response = self.client.get(reverse("api:education-list"))
+
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertEqual(data[0]["title"], self.education.title)
+        self.assertEqual(data[0]["description"], self.education.description)
+        self.assertEqual(data[0]["category_display"], "Kuliah")
+        self.assertIsNone(data[0]["ended_at"])
+
+    def test_empty_education_api(self):
         Education.objects.all().delete()
+        response = self.client.get(reverse("api:education-list"))
+
+        self.assertEqual(response.json(), [])
         response = self.client.get(reverse("main:show_education"))
-        
-        self.assertContains(response, "Belum ada data education.")
+        self.assertContains(response, "Belum ada data pendidikan atau tidak ditemukan.")
 
     def test_completed_education_shows_end_year(self):
         self.education.ended_at = 2029
         self.education.save()
-        response = self.client.get(reverse("main:show_education"))
+        response = self.client.get(reverse("api:education-list"))
 
-        self.assertContains(response, "2029")
-        self.assertNotContains(response, "Present")
+        self.assertEqual(response.json()[0]["ended_at"], 2029)
