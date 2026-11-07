@@ -42,12 +42,15 @@
     {% if user.is_superuser %}
         {% include "components/education_form_modal.html" %}
     {% endif %}
+    {% if user.is_superuser or is_editor %}
+        {% include "components/education_edit_modal.html" %}
+    {% endif %}
+    {# Menjamin cookie csrftoken dibuat untuk semua pengguna (dipakai header X-CSRFToken). #}
     {% csrf_token %}
     <script>
     const BASE_EDUCATION_ENDPOINT = "{% url 'api:education-list' %}";
     const DETAIL_EDUCATION_ENDPOINT = "{% url 'api:education-detail' '00000000-0000-0000-0000-000000000000' %}";
     const STAR_EDUCATION_ENDPOINT = "{% url 'api:education-star' '00000000-0000-0000-0000-000000000000' %}";
-    const EDIT_EDUCATION_PAGE = "{% url 'main:update_education' '00000000-0000-0000-0000-000000000000' %}";
     const IS_SUPERUSER = "{{ user.is_superuser|yesno:'true,false' }}" === "true";
     const IS_EDITOR = "{{ is_editor|yesno:'true,false' }}" === "true";
     const IS_AUTHENTICATED = "{{ user.is_authenticated|yesno:'true,false' }}" === "true";
@@ -60,9 +63,14 @@
     const eduSearchForm = document.getElementById('education-search-form');
     const eduSearchInput = document.getElementById('education-search-input');
     const educationForm = document.getElementById('education-form');
+    const educationEditForm = document.getElementById('education-edit-form');
     let educationAbortController;
     let educationSearchDebounceTimer;
+    let editingEducationId = null;
+    // Menyimpan data terakhir dari API agar modal edit bisa diisi tanpa request tambahan
+    const educationCache = new Map();
 
+    // Membaca nilai cookie, dipakai untuk token CSRF
     function getCookie(name) {
         const prefix = `${name}=`;
         const cookie = document.cookie.split(';').map(value => value.trim())
@@ -70,6 +78,7 @@
         return cookie ? decodeURIComponent(cookie.slice(prefix.length)) : null;
     }
 
+    // Mengubah karakter khusus HTML menjadi entity (perlindungan XSS)
     function escapeHtml(value) {
         return String(value ?? '').replaceAll('&', '&amp;')
             .replaceAll('<', '&lt;').replaceAll('>', '&gt;')
@@ -94,7 +103,8 @@
         article.className = 'education-item';
 
         const editHtml = canEdit
-            ? `<a href="${educationEndpoint(EDIT_EDUCATION_PAGE, edu.id)}" class="button button-secondary">Edit</a>`
+            ? `<button type="button" class="button button-secondary" data-action="edit"
+                    data-id="${escapeHtml(edu.id)}">Edit</button>`
             : '';
         const deleteHtml = IS_SUPERUSER
             ? `<button type="button" class="button button-danger" data-action="delete"
@@ -132,6 +142,7 @@
         return article;
     }
 
+    // Mengambil daftar (dengan pencarian ?title=) dari API DRF
     async function fetchEducation(searchQuery = '') {
         if (educationAbortController) educationAbortController.abort();
         educationAbortController = new AbortController();
@@ -145,6 +156,8 @@
             });
             if (!response.ok) throw new Error(`HTTP ${response.status}`);
             const items = await response.json();
+            educationCache.clear();
+            items.forEach(item => educationCache.set(item.id, item));
             eduListContainer.replaceChildren(...items.map(buildEducationCardElement));
             displayEducationSection({ showList: items.length > 0, showEmpty: items.length === 0 });
         } catch (error) {
@@ -154,11 +167,13 @@
         }
     }
 
+    // Menggabungkan pesan error DRF ({"title": ["..."]} atau {"detail": "..."}) menjadi satu teks
     function apiErrorMessage(data, status) {
         const messages = Object.values(data).flat().filter(value => typeof value === 'string');
         return messages.join(' ') || `Request gagal (HTTP ${status}).`;
     }
 
+    // Satu tempat untuk POST/PUT/PATCH/DELETE: JSON, header X-CSRFToken, dan penanganan error
     async function writeEducation(url, method, payload) {
         const response = await fetch(url, {
             method,
@@ -175,22 +190,26 @@
         return data;
     }
 
+    // Tahun harus angka; tahun selesai kosong dikirim sebagai null
+    function buildEducationPayload(form) {
+        const fields = new FormData(form);
+        const startedAt = fields.get('started_at');
+        const endedAt = fields.get('ended_at');
+        return {
+            title: fields.get('title'),
+            description: fields.get('description'),
+            category: fields.get('category'),
+            started_at: startedAt === '' ? null : Number(startedAt),
+            ended_at: endedAt === '' ? null : Number(endedAt),
+        };
+    }
+
     async function addEducation(event) {
         event.preventDefault();
         const button = educationForm.querySelector('button[type="submit"]');
         button.disabled = true;
         try {
-            const fields = new FormData(educationForm);
-            const startedAt = fields.get('started_at');
-            const endedAt = fields.get('ended_at');
-            const payload = {
-                title: fields.get('title'),
-                description: fields.get('description'),
-                category: fields.get('category'),
-                started_at: startedAt === '' ? null : Number(startedAt),
-                ended_at: endedAt === '' ? null : Number(endedAt),
-            };
-            await writeEducation(BASE_EDUCATION_ENDPOINT, 'POST', payload);
+            await writeEducation(BASE_EDUCATION_ENDPOINT, 'POST', buildEducationPayload(educationForm));
             educationForm.reset();
             document.getElementById('add-education-modal').hidePopover();
             showToast('Berhasil', 'Data pendidikan berhasil ditambahkan!', 'success');
@@ -202,12 +221,52 @@
         }
     }
 
-    if (educationForm) educationForm.addEventListener('submit', addEducation);
+    // Membuka modal edit dan mengisinya dengan data kartu yang dipilih
+    function openEditModal(id) {
+        const edu = educationCache.get(id);
+        if (!edu) return;
+        editingEducationId = id;
+        document.getElementById('edit-title').value = edu.title;
+        document.getElementById('edit-description').value = edu.description;
+        document.getElementById('edit-category').value = edu.category;
+        document.getElementById('edit-started-at').value = edu.started_at;
+        document.getElementById('edit-ended-at').value = edu.ended_at ?? '';
+        document.getElementById('edit-education-modal').showPopover();
+    }
 
+    // Mengirim perubahan lewat PUT (semua field dikirim) ke API detail
+    async function updateEducation(event) {
+        event.preventDefault();
+        if (!editingEducationId) return;
+        const button = educationEditForm.querySelector('button[type="submit"]');
+        button.disabled = true;
+        try {
+            await writeEducation(
+                educationEndpoint(DETAIL_EDUCATION_ENDPOINT, editingEducationId),
+                'PUT', buildEducationPayload(educationEditForm),
+            );
+            document.getElementById('edit-education-modal').hidePopover();
+            showToast('Berhasil', 'Data pendidikan berhasil diperbarui!', 'success');
+            await fetchEducation(eduSearchInput.value.trim());
+        } catch (error) {
+            showToast('Gagal menyimpan perubahan', error.message, 'error');
+        } finally {
+            button.disabled = false;
+        }
+    }
+
+    if (educationForm) educationForm.addEventListener('submit', addEducation);
+    if (educationEditForm) educationEditForm.addEventListener('submit', updateEducation);
+
+    // Event delegation: satu listener untuk tombol star, edit, dan hapus
     eduListContainer.addEventListener('click', async function(event) {
         const button = event.target.closest('button[data-action]');
         if (!button || button.disabled) return;
         const action = button.dataset.action;
+        if (action === 'edit') {
+            openEditModal(button.dataset.id);
+            return;
+        }
         if (action === 'delete' && !window.confirm('Yakin ingin menghapus data ini?')) return;
         button.disabled = true;
         try {
@@ -223,6 +282,7 @@
         }
     });
 
+    // Pencarian dengan debounce 300 ms
     eduSearchInput.addEventListener('input', function() {
         clearTimeout(educationSearchDebounceTimer);
         educationSearchDebounceTimer = setTimeout(
