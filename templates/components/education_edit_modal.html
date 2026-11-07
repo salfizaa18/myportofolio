@@ -1,0 +1,55 @@
+<div id="edit-education-modal"
+     class="project-form-modal"
+     popover="auto"
+     role="dialog"
+     aria-modal="true"
+     aria-labelledby="edit-education-modal-title">
+    <button type="button"
+            class="project-form-modal__backdrop"
+            popovertarget="edit-education-modal"
+            popovertargetaction="hide"
+            aria-label="Tutup form edit pendidikan"></button>
+
+    <div class="project-form-modal__content">
+        <button type="button"
+                class="project-form-modal__close"
+                popovertarget="edit-education-modal"
+                popovertargetaction="hide"
+                aria-label="Tutup form edit pendidikan">×</button>
+
+        <h2 id="edit-education-modal-title">Edit Pendidikan</h2>
+        <form id="education-edit-form" class="project-form">
+            <div class="form-group">
+                <label for="edit-title">Nama Institusi</label>
+                <input type="text" id="edit-title" name="title" maxlength="255" required>
+            </div>
+            <div class="form-group">
+                <label for="edit-description">Deskripsi</label>
+                <textarea id="edit-description" name="description" rows="3" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="edit-category">Jenjang</label>
+                <select id="edit-category" name="category" required>
+                    <option value="SMA">Sekolah Menengah Atas</option>
+                    <option value="Kuliah">Kuliah</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="edit-started-at">Tahun Mulai</label>
+                <input type="number" id="edit-started-at" name="started_at" required>
+            </div>
+            <div class="form-group">
+                <label for="edit-ended-at">Tahun Selesai</label>
+                <input type="number" id="edit-ended-at" name="ended_at"
+                       placeholder="Kosongkan jika masih berjalan">
+            </div>
+            <div class="project-form-modal__actions">
+                <button type="button"
+                        class="button button-secondary"
+                        popovertarget="edit-education-modal"
+                        popovertargetaction="hide">Batal</button>
+                <button type="submit" class="button">Simpan Perubahan</button>
+            </div>
+        </form>
+    </div>
+</div>
